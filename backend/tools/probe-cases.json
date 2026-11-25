@@ -1,0 +1,240 @@
+[
+  {
+    "case": "known zero",
+    "app_id": 101,
+    "links": [
+      {
+        "uid": "101",
+        "game": {
+          "id": 200,
+          "name": "Lighthouse (fixture)"
+        }
+      }
+    ],
+    "library": {
+      "response": {
+        "games": [
+          {
+            "appid": 101,
+            "playtime_forever": 0
+          }
+        ]
+      }
+    },
+    "expect": {
+      "steam_state": "known_minutes",
+      "minutes": 0,
+      "qualifies_in_sample": false
+    }
+  },
+  {
+    "case": "one minute left",
+    "app_id": 101,
+    "links": [
+      {
+        "uid": "101",
+        "game": {
+          "id": 200,
+          "name": "Lighthouse (fixture)"
+        }
+      }
+    ],
+    "library": {
+      "response": {
+        "games": [
+          {
+            "appid": 101,
+            "playtime_forever": 89
+          }
+        ]
+      }
+    },
+    "expect": {
+      "steam_state": "known_minutes",
+      "minutes": 89,
+      "qualifies_in_sample": false
+    }
+  },
+  {
+    "case": "exact threshold",
+    "app_id": 101,
+    "links": [
+      {
+        "uid": "101",
+        "game": {
+          "id": 200,
+          "name": "Lighthouse (fixture)"
+        }
+      }
+    ],
+    "library": {
+      "response": {
+        "games": [
+          {
+            "appid": 101,
+            "playtime_forever": 90
+          }
+        ]
+      }
+    },
+    "expect": {
+      "steam_state": "known_minutes",
+      "minutes": 90,
+      "qualifies_in_sample": true
+    }
+  },
+  {
+    "case": "missing minutes",
+    "app_id": 101,
+    "links": [
+      {
+        "uid": "101",
+        "game": {
+          "id": 200,
+          "name": "Lighthouse (fixture)"
+        }
+      }
+    ],
+    "library": {
+      "response": {
+        "games": [
+          {
+            "appid": 101
+          }
+        ]
+      }
+    },
+    "expect": {
+      "steam_state": "minutes_unavailable",
+      "minutes": null,
+      "qualifies_in_sample": false
+    }
+  },
+  {
+    "case": "empty response",
+    "app_id": 101,
+    "links": [
+      {
+        "uid": "101",
+        "game": {
+          "id": 200,
+          "name": "Lighthouse (fixture)"
+        }
+      }
+    ],
+    "library": {
+      "response": {}
+    },
+    "expect": {
+      "steam_state": "library_unavailable",
+      "minutes": null,
+      "qualifies_in_sample": false
+    }
+  },
+  {
+    "case": "visible empty result",
+    "app_id": 101,
+    "links": [
+      {
+        "uid": "101",
+        "game": {
+          "id": 200,
+          "name": "Lighthouse (fixture)"
+        }
+      }
+    ],
+    "library": {
+      "response": {
+        "game_count": 0
+      }
+    },
+    "expect": {
+      "steam_state": "game_not_returned",
+      "minutes": null,
+      "qualifies_in_sample": false
+    }
+  },
+  {
+    "case": "different game",
+    "app_id": 101,
+    "links": [
+      {
+        "uid": "101",
+        "game": {
+          "id": 200,
+          "name": "Lighthouse (fixture)"
+        }
+      }
+    ],
+    "library": {
+      "response": {
+        "games": [
+          {
+            "appid": 102,
+            "playtime_forever": 200
+          }
+        ]
+      }
+    },
+    "expect": {
+      "steam_state": "game_not_returned",
+      "minutes": null,
+      "qualifies_in_sample": false
+    }
+  },
+  {
+    "case": "ambiguous mapping",
+    "app_id": 101,
+    "links": [
+      {
+        "uid": "101",
+        "game": {
+          "id": 200,
+          "name": "Lighthouse (fixture)"
+        }
+      },
+      {
+        "uid": "101",
+        "game": {
+          "id": 201,
+          "name": "Lighthouse edition (fixture)"
+        }
+      }
+    ],
+    "library": {
+      "response": {
+        "games": [
+          {
+            "appid": 101,
+            "playtime_forever": 120
+          }
+        ]
+      }
+    },
+    "expect": {
+      "steam_state": "known_minutes",
+      "minutes": 120,
+      "qualifies_in_sample": false
+    }
+  },
+  {
+    "case": "missing mapping",
+    "app_id": 101,
+    "links": [],
+    "library": {
+      "response": {
+        "games": [
+          {
+            "appid": 101,
+            "playtime_forever": 120
+          }
+        ]
+      }
+    },
+    "expect": {
+      "steam_state": "known_minutes",
+      "minutes": 120,
+      "qualifies_in_sample": false
+    }
+  }
+]
